@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión - CheckExport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'DM Sans',sans-serif; }
+    h1,h2,h3,h4,h5 { font-family:'Outfit',sans-serif; }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Panel izquierdo */
+    .left-panel {
+      background: url('https://i0.wp.com/www.metroflorcolombia.com/wp-content/uploads/2023/02/Hortensia-Colombiana-Azul.jpg?resize=1140%2C660&ssl=1') center/cover no-repeat;
+      position: relative;
+      display: flex; flex-direction: column;
+      justify-content: space-between; padding: 2.5rem;
+    }
+    .left-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(13,79,50,0.92) 0%, rgba(13,79,50,0.7) 100%);
+    }
+    .left-content { position: relative; z-index: 2; }
+    .brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: white; text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .brand span { color: #6fcfa0; }
+    .left-bottom { position: relative; z-index: 2; }
+    .left-bottom h2 {
+      color: white; font-size: 2rem;
+      font-weight: 800; line-height: 1.2;
+      margin-bottom: 1rem; letter-spacing: -0.5px;
+    }
+    .left-bottom h2 span { color: #6fcfa0; }
+    .left-bottom p { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.6; }
+    .feature-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+    .feature-item {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.85); font-size: 0.85rem;
+    }
+    .feature-item i { color: #6fcfa0; font-size: 1rem; }
+
+    /* Panel derecho */
+    .right-panel {
+      background: #f4f6f3;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .login-box { width: 100%; max-width: 400px; }
+    .login-box h3 {
+      font-size: 1.6rem; font-weight: 700;
+      color: #1a1f18; margin-bottom: 6px;
+    }
+    .login-box .subtitle { color: #4a5248; font-size: 0.88rem; margin-bottom: 2rem; }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label {
+      display: block; font-weight: 600;
+      font-size: 0.84rem; color: #1a1f18; margin-bottom: 5px;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap i {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%); color: #8a9088; font-size: 1rem;
+    }
+    .form-input {
+      width: 100%; padding: 0.65rem 0.9rem 0.65rem 2.4rem;
+      border: 1.5px solid #dde3da; border-radius: 8px;
+      font-size: 0.9rem; background: white; transition: border-color 0.2s;
+      outline: none; color: #1a1f18;
+    }
+    .form-input:focus { border-color: #1a7a4e; box-shadow: 0 0 0 3px rgba(26,122,78,0.1); }
+
+    .btn-login {
+      width: 100%; padding: 0.7rem;
+      background: #0d4f32; color: white;
+      border: none; border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-login:hover { background: #1a7a4e; }
+
+    .error-box {
+      background: #fdecea; border: 1px solid #f5b8b2;
+      border-radius: 8px; padding: 0.7rem 1rem;
+      font-size: 0.83rem; color: #c0392b; margin-bottom: 1rem;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.4rem 0; color: #8a9088; font-size: 0.8rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: #dde3da;
+    }
+
+    .btn-registro {
+      width: 100%; padding: 0.65rem;
+      background: white; color: #0d4f32;
+      border: 1.5px solid #dde3da; border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: block; text-align: center;
+    }
+    .btn-registro:hover { border-color: #1a7a4e; background: #e8f5ef; color: #0d4f32; }
+
+    .back-link {
+      display: block; text-align: center;
+      margin-top: 1.5rem; font-size: 0.82rem;
+      color: #8a9088; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #0d4f32; }
+
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Panel izquierdo -->
+<div class="left-panel">
+  <div class="left-overlay"></div>
+  <div class="left-content">
+    <a href="/" class="brand"><i class="bi bi-flower1"></i>Check<span>Export</span></a>
+  </div>
+  <div class="left-bottom">
+    <h2>Verifica tu cumplimiento <span>fitosanitario</span></h2>
+    <p>Sistema de verificación basado en la Resolución ICA 2191/2024 para exportadores de flores ornamentales.</p>
+    <div class="feature-list">
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>62 requisitos del Anexo 2</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Reportes PDF descargables</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Alertas de vencimientos</div>
+      <div class="feature-item"><i class="bi bi-check-circle-fill"></i>Indicadores de riesgo en tiempo real</div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel derecho -->
+<div class="right-panel">
+  <div class="login-box">
+    <h3>Bienvenido de nuevo</h3>
+    <p class="subtitle">Ingresa tus credenciales para continuar</p>
+
+    {% if form.errors %}
+    <div class="error-box">
+      <i class="bi bi-exclamation-circle me-1"></i>Usuario o contraseña incorrectos.
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="form-label">Usuario</label>
+        <div class="input-wrap">
+          <i class="bi bi-person"></i>
+          <input type="text" name="username" class="form-input" placeholder="Tu nombre de usuario" required autofocus>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock"></i>
+          <input type="password" name="password" class="form-input" placeholder="Tu contraseña" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-login">
+        <i class="bi bi-box-arrow-in-right me-1"></i>Ingresar al sistema
+      </button>
+    </form>
+
+    <div class="divider">¿No tienes cuenta?</div>
+
+    <a href="/usuarios/registro/" class="btn-registro">
+      <i class="bi bi-person-plus me-1"></i>Crear cuenta nueva
+    </a>
+
+    <a href="/" class="back-link">
+      <i class="bi bi-arrow-left me-1"></i>Volver a la página principal
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

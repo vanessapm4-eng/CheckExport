@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block title %}Checklist · {{ predio.nombre }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .predio-header {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .predio-title { font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700; margin:0; }
+  .predio-sub { font-size:0.83rem; color:var(--text-light); margin:2px 0 0; }
+
+  .progress-ring-wrap { text-align:center; min-width:120px; }
+  .progress-bar-wrap { flex:1; min-width:200px; }
+  .pct-num { font-family:'Outfit',sans-serif; font-size:2rem; font-weight:700; color:var(--verde); }
+  .pct-label { font-size:0.78rem; color:var(--text-light); }
+
+  .fase-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .fase-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .fase-header:hover { background: #fafbf9; }
+  .fase-titulo { font-family:'Outfit',sans-serif; font-weight:600; font-size:0.93rem; color:var(--verde); margin:0; }
+  .fase-prog { font-size:0.78rem; color:var(--text-light); display:flex; align-items:center; gap:8px; }
+  .fase-prog .mini-bar { width:80px; height:5px; background:#eef0ec; border-radius:99px; overflow:hidden; }
+  .fase-prog .mini-fill { height:100%; background:var(--verde-mid); border-radius:99px; transition:width 0.4s; }
+
+  .item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.9rem 1.5rem;
+    border-top: 1px solid #f0f2ef;
+    transition: background 0.15s;
+  }
+  .item-row:hover { background: #fafbf9; }
+  .item-num { font-size:0.75rem; color:var(--text-light); min-width:24px; padding-top:2px; font-weight:600; }
+  .item-info { flex:1; }
+  .item-norma {
+    display:inline-block; font-size:0.7rem; background:var(--verde-light);
+    color:var(--verde); padding:1px 7px; border-radius:4px; margin-bottom:4px;
+    border:1px solid #b8ddc9;
+  }
+  .item-desc { font-size:0.88rem; color:var(--text); line-height:1.45; }
+
+  .estado-btns { display:flex; gap:6px; flex-shrink:0; align-items:center; }
+  .btn-est {
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text-light);
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-est:hover { border-color: #aaa; color: var(--text); }
+  .btn-est.cumple.active { background:#e8f5ef; border-color:#1a7a4e; color:#0d4f32; }
+  .btn-est.no_cumple.active { background:#fdecea; border-color:#e74c3c; color:#c0392b; }
+  .btn-est.na.active { background:#f0f2ef; border-color:#9a9e98; color:#4a5248; }
+  .btn-est.loading { opacity:0.5; pointer-events:none; }
+
+  .btn-volver {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-mid);
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .btn-volver:hover { background: var(--bg); color: var(--text); }
+  
+  .fase-body { display:none; }
+  .fase-body.open { display:block; }
+  .fase-chevron { transition: transform 0.2s; }
+  .fase-header.open .fase-chevron { transform: rotate(180deg); }
+
+  </style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header del predio -->
+<div class="predio-header">
+  <div>
+    <h2 class="predio-title">{{ predio.nombre }}</h2>
+    <p class="predio-sub"><i class="bi bi-tag me-1"></i>Registro ICA: {{ predio.registro_ica }} &nbsp;·&nbsp; {{ predio.municipio }}, {{ predio.departamento }}</p>
+  </div>
+  <div class="d-flex align-items-center gap-4">
+    <div class="progress-ring-wrap">
+      <div class="pct-num" id="pct-num">{{ porcentaje }}%</div>
+      <div class="pct-label">cumplimiento</div>
+      <div style="width:100%; height:6px; background:#eef0ec; border-radius:99px; margin-top:6px; overflow:hidden;">
+        <div id="barra-global" style="height:100%; width:{{ porcentaje }}%; background:var(--verde-mid); border-radius:99px; transition:width 0.5s ease;"></div>
+      </div>
+    </div>
+    <div class="d-flex gap-2">
+  <a href="/reportes/pdf/{{ predio.pk }}/" class="btn-volver" style="background:var(--verde); color:white; border-color:var(--verde)">
+    <i class="bi bi-file-pdf me-1"></i>Descargar PDF
+  </a>
+  <a href="/dashboard/ " class="btn-volver"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+</div>
+  </div>
+</div>
+
+<!-- Fases -->
+{% for fase in fases %}
+<div class="fase-card">
+  <div class="fase-header" onclick="toggleFase(this)">
+    <h6 class="fase-titulo"><i class="bi bi-clipboard2-check me-2"></i>{{ fase.nombre }}</h6>
+    <div class="d-flex align-items-center gap-3">
+      <div class="fase-prog">
+        <div class="mini-bar"><div class="mini-fill" id="mini-{{ forloop.counter }}" style="width:0%"></div></div>
+        <span id="fase-pct-{{ forloop.counter }}">0%</span>
+      </div>
+      <i class="bi bi-chevron-down fase-chevron" style="font-size:0.85rem; color:var(--text-light)"></i>
+    </div>
+  </div>
+  <div class="fase-body {% if forloop.first %}open{% endif %}">
+    {% for item in fase.items.all %}
+    <div class="item-row" id="row-{{ item.pk }}">
+      <div class="item-num">{{ forloop.counter }}</div>
+      <div class="item-info">
+        {% if item.norma_referencia %}<span class="item-norma">{{ item.norma_referencia }}</span>{% endif %}
+        <div class="item-desc">{{ item.descripcion }}</div>
+      </div>
+      <div class="estado-btns">
+        <button class="btn-est cumple {% if item.registro.estado == 'cumple' %}active{% endif %}"
+                onclick="marcar(this, {{ item.pk }}, {{ predio.pk }}, 'cumple')">
+          <i class="bi bi-check2 me-1"></i>Cumple
+        </button>
+        <button class="btn-est no_cumple {% if item.registro.estado == 'no_cumple' %}active{% endif %}"
+                onclick="marcar(this, {{ item.pk }}, {{ predio.pk }}, 'no_cumple')">
+          <i class="bi bi-x me-1"></i>No cumple
+        </button>
+        <button class="btn-est na {% if item.registro.estado == 'na' %}active{% endif %}"
+                onclick="marcar(this, {{ item.pk }}, {{ predio.pk }}, 'na')">
+          N/A
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const CSRF = '{{ csrf_token }}';
+
+function toggleFase(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+
+function marcar(btn, itemPk, predioPk, estado) {
+  const row = document.getElementById('row-' + itemPk);
+  const btns = row.querySelectorAll('.btn-est');
+  btns.forEach(b => { b.classList.remove('active'); b.classList.add('loading'); });
+
+  fetch(`/checklist/predio/${predioPk}/item/${itemPk}/actualizar/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
+    body: JSON.stringify({ estado, observacion: '' })
+  })
+  .then(r => r.json())
+  .then(data => {
+    btns.forEach(b => b.classList.remove('loading'));
+    btn.classList.add('active');
+    // Actualizar barra global
+    document.getElementById('pct-num').textContent = data.porcentaje + '%';
+    document.getElementById('barra-global').style.width = data.porcentaje + '%';
+    mostrarToast('✓ Guardado');
+    actualizarFases();
+  });
+}
+
+function actualizarFases() {
+  document.querySelectorAll('.fase-card').forEach((card, i) => {
+    const btns = card.querySelectorAll('.btn-est.active');
+    const total = card.querySelectorAll('.item-row').length;
+    const pct = total > 0 ? Math.round((btns.length / total) * 100) : 0;
+    const mini = document.getElementById('mini-' + (i+1));
+    const lbl = document.getElementById('fase-pct-' + (i+1));
+    if (mini) mini.style.width = pct + '%';
+    if (lbl) lbl.textContent = pct + '%';
+  });
+}
+
+// Calcular fases al cargar
+actualizarFases();
+</script>
+{% endblock %}

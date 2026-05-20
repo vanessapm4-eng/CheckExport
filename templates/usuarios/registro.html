@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear cuenta - CheckExport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'DM Sans',sans-serif; }
+    h1,h2,h3,h4,h5 { font-family:'Outfit',sans-serif; }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .left-panel {
+      background: url('https://floresco.co/img/ybc_blog/post/17309235331-6-single-default.jpg') center/cover no-repeat;
+      position: relative;
+      display: flex; flex-direction: column;
+      justify-content: space-between; padding: 2.5rem;
+    }
+    .left-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(13,79,50,0.92) 0%, rgba(13,79,50,0.7) 100%);
+    }
+    .left-content { position: relative; z-index: 2; }
+    .brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: white; text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .brand span { color: #6fcfa0; }
+    .left-bottom { position: relative; z-index: 2; }
+    .left-bottom h2 {
+      color: white; font-size: 1.8rem;
+      font-weight: 800; line-height: 1.2;
+      margin-bottom: 0.8rem; letter-spacing: -0.5px;
+    }
+    .left-bottom h2 span { color: #6fcfa0; }
+    .left-bottom p { color: rgba(255,255,255,0.7); font-size: 0.88rem; line-height: 1.6; }
+
+    .right-panel {
+      background: #f4f6f3;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; overflow-y: auto;
+    }
+    .register-box { width: 100%; max-width: 400px; padding: 1rem 0; }
+    .register-box h3 { font-size: 1.6rem; font-weight: 700; color: #1a1f18; margin-bottom: 6px; }
+    .register-box .subtitle { color: #4a5248; font-size: 0.88rem; margin-bottom: 2rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-label { display: block; font-weight: 600; font-size: 0.84rem; color: #1a1f18; margin-bottom: 5px; }
+    .input-wrap { position: relative; }
+    .input-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #8a9088; font-size: 1rem; }
+    .form-input {
+      width: 100%; padding: 0.65rem 0.9rem 0.65rem 2.4rem;
+      border: 1.5px solid #dde3da; border-radius: 8px;
+      font-size: 0.88rem; background: white; transition: border-color 0.2s;
+      outline: none; color: #1a1f18;
+    }
+    .form-input:focus { border-color: #1a7a4e; box-shadow: 0 0 0 3px rgba(26,122,78,0.1); }
+
+    .btn-register {
+      width: 100%; padding: 0.7rem;
+      background: #0d4f32; color: white;
+      border: none; border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s; margin-top: 0.5rem;
+    }
+    .btn-register:hover { background: #1a7a4e; }
+
+    .error-box {
+      background: #fdecea; border: 1px solid #f5b8b2;
+      border-radius: 8px; padding: 0.7rem 1rem;
+      font-size: 0.83rem; color: #c0392b; margin-bottom: 1rem;
+    }
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.2rem 0; color: #8a9088; font-size: 0.8rem;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #dde3da; }
+    .btn-login {
+      width: 100%; padding: 0.65rem;
+      background: white; color: #0d4f32;
+      border: 1.5px solid #dde3da; border-radius: 8px;
+      font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: block; text-align: center;
+    }
+    .btn-login:hover { border-color: #1a7a4e; background: #e8f5ef; color: #0d4f32; }
+    .back-link {
+      display: block; text-align: center; margin-top: 1.2rem;
+      font-size: 0.82rem; color: #8a9088; text-decoration: none;
+    }
+    .back-link:hover { color: #0d4f32; }
+
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="left-panel">
+  <div class="left-overlay"></div>
+  <div class="left-content">
+    <a href="/" class="brand"><i class="bi bi-flower1"></i>Check<span>Export</span></a>
+  </div>
+  <div class="left-bottom">
+    <h2>Empieza a exportar con <span>confianza</span></h2>
+    <p>Crea tu cuenta y comienza a verificar el cumplimiento fitosanitario de tus predios hoy mismo.</p>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="register-box">
+    <h3>Crear cuenta</h3>
+    <p class="subtitle">Completa los datos para registrarte</p>
+
+    {% if messages %}
+      {% for msg in messages %}
+      <div class="error-box"><i class="bi bi-exclamation-circle me-1"></i>{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <div class="input-wrap">
+            <i class="bi bi-person"></i>
+            <input type="text" name="first_name" class="form-input" placeholder="Tu nombre" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellido</label>
+          <div class="input-wrap">
+            <i class="bi bi-person"></i>
+            <input type="text" name="last_name" class="form-input" placeholder="Tu apellido" required>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Usuario</label>
+        <div class="input-wrap">
+          <i class="bi bi-at"></i>
+          <input type="text" name="username" class="form-input" placeholder="Nombre de usuario" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <div class="input-wrap">
+          <i class="bi bi-envelope"></i>
+          <input type="email" name="email" class="form-input" placeholder="tucorreo@ejemplo.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock"></i>
+          <input type="password" name="password1" class="form-input" placeholder="Mínimo 8 caracteres" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmar contraseña</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock-fill"></i>
+          <input type="password" name="password2" class="form-input" placeholder="Repite la contraseña" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-register">
+        <i class="bi bi-person-plus me-1"></i>Crear cuenta
+      </button>
+    </form>
+
+    <div class="divider">¿Ya tienes cuenta?</div>
+    <a href="/usuarios/login/" class="btn-login">
+      <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
+    </a>
+    <a href="/" class="back-link"><i class="bi bi-arrow-left me-1"></i>Volver al inicio</a>
+  </div>
+</div>
+
+</body>
+</html>

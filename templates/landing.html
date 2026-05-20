@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CheckExport — Verificación Fitosanitaria para Exportación de Flores</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #0d4f32;
+      --verde-mid: #1a7a4e;
+      --verde-light: #e8f5ef;
+      --amber: #e8a020;
+      --border: #dde3da;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; color: #1a1f18; overflow-x: hidden; }
+    h1,h2,h3,h4,h5 { font-family: 'Outfit', sans-serif; }
+
+    /* NAVBAR */
+    .nav-top {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.3s;
+    }
+    .nav-top.scrolled {
+      background: rgba(13,79,50,0.97);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+      padding: 0.7rem 2rem;
+    }
+    .nav-brand {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700; font-size: 1.3rem;
+      color: white; text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+    .nav-brand span { color: #6fcfa0; }
+    .btn-ingresar {
+      background: white; color: var(--verde);
+      border: none; padding: 0.5rem 1.3rem;
+      border-radius: 8px; font-weight: 600;
+      font-size: 0.88rem; font-family: 'Outfit', sans-serif;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-ingresar:hover { background: #e8f5ef; color: var(--verde); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: url('https://refugiodelamontana.com/wp-content/uploads/2022/02/plantasornamentales-1536x979.jpg') center/cover no-repeat;
+      position: relative;
+      display: flex; align-items: center;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(13,79,50,0.88) 0%, rgba(13,79,50,0.6) 60%, rgba(0,0,0,0.3) 100%);
+    }
+    .hero-content { position: relative; z-index: 2; padding: 0 2rem; max-width: 700px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.15); color: #a8e6c4;
+      padding: 0.4rem 1rem; border-radius: 99px;
+      font-size: 0.8rem; font-weight: 500; border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 1.5rem; backdrop-filter: blur(4px);
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800; color: white;
+      line-height: 1.1; margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
+    .hero h1 span { color: #6fcfa0; }
+    .hero p {
+      font-size: 1.05rem; color: rgba(255,255,255,0.82);
+      line-height: 1.6; margin-bottom: 2rem; max-width: 540px;
+    }
+    .btn-hero {
+      background: white; color: var(--verde);
+      padding: 0.8rem 2rem; border-radius: 10px;
+      font-weight: 700; font-size: 0.95rem;
+      font-family: 'Outfit', sans-serif;
+      text-decoration: none; display: inline-flex;
+      align-items: center; gap: 8px;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); color: var(--verde); }
+    .btn-hero-outline {
+      background: transparent; color: white;
+      padding: 0.8rem 2rem; border-radius: 10px;
+      font-weight: 600; font-size: 0.95rem;
+      font-family: 'Outfit', sans-serif;
+      text-decoration: none; display: inline-flex;
+      align-items: center; gap: 8px;
+      border: 2px solid rgba(255,255,255,0.4);
+      transition: all 0.2s;
+    }
+    .btn-hero-outline:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); }
+
+    /* STATS */
+    .stats-section {
+      background: var(--verde);
+      padding: 2.5rem 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem; font-weight: 800;
+      color: #6fcfa0; line-height: 1;
+    }
+    .stat-label { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 4px; }
+
+    /* FEATURES */
+    .section { padding: 5rem 2rem; }
+    .section-tag {
+      display: inline-block;
+      background: var(--verde-light); color: var(--verde-mid);
+      padding: 0.3rem 0.9rem; border-radius: 99px;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 1rem; border: 1px solid #b8ddc9;
+    }
+    .section h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 700; margin-bottom: 1rem;
+      letter-spacing: -0.5px; color: #1a1f18;
+    }
+    .section .lead { color: #4a5248; font-size: 1rem; max-width: 520px; }
+
+    .feat-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.8rem;
+      height: 100%; transition: all 0.25s;
+    }
+    .feat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); border-color: #b8ddc9; }
+    .feat-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1rem;
+    }
+    .feat-card h5 { font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+    .feat-card p { font-size: 0.88rem; color: #4a5248; line-height: 1.5; margin: 0; }
+
+    /* HOW IT WORKS */
+    .how-section { background: #f4f6f3; padding: 5rem 2rem; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--verde); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-weight: 700;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .step-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .step-item h5 { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+    .step-item p { font-size: 0.85rem; color: #4a5248; margin: 0; }
+
+    /* NORMA */
+    .norma-section {
+      background: var(--verde); padding: 4rem 2rem;
+      text-align: center;
+    }
+    .norma-section h2 { color: white; font-size: 1.8rem; margin-bottom: 1rem; }
+    .norma-section p { color: rgba(255,255,255,0.75); max-width: 600px; margin: 0 auto 2rem; font-size: 0.95rem; }
+    .norma-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.1); color: #a8e6c4;
+      padding: 0.5rem 1.2rem; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.2); margin: 0.3rem;
+    }
+
+    /* CONTACT */
+    .contact-section { padding: 5rem 2rem; background: white; }
+    .contact-card {
+      background: #f4f6f3; border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem;
+      max-width: 680px; margin: 0 auto;
+    }
+    .contact-person {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem; background: white;
+      border: 1px solid var(--border); border-radius: 12px;
+      margin-bottom: 0.8rem; transition: all 0.2s;
+    }
+    .contact-person:hover { border-color: #b8ddc9; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .contact-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--verde-light); color: var(--verde-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+    .contact-email { font-size: 0.82rem; color: #4a5248; }
+    .contact-email a { color: var(--verde-mid); text-decoration: none; }
+    .contact-email a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      background: #0a3522; color: rgba(255,255,255,0.6);
+      text-align: center; padding: 1.5rem;
+      font-size: 0.8rem;
+    }
+    footer span { color: #6fcfa0; }
+
+    /* ANIMATIONS */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: all 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav-top" id="navbar">
+  <a href="/" class="nav-brand"><i class="bi bi-flower1 me-2"></i>Check<span>Export</span></a>
+  <div class="d-flex gap-2">
+  <a href="/usuarios/registro/" class="btn-ingresar" style="background:transparent; color:white; border:2px solid rgba(255,255,255,0.5)">
+    <i class="bi bi-person-plus me-1"></i>Registrarse
+  </a>
+  <a href="/usuarios/login/" class="btn-ingresar">
+    <i class="bi bi-box-arrow-in-right me-1"></i>Ingresar
+  </a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="bi bi-patch-check-fill"></i>
+        Resolución ICA 2191/2024
+      </div>
+      <h1>Exporta flores con <span>confianza fitosanitaria</span></h1>
+      <p>
+        Sistema de verificación del cumplimiento fitosanitario para exportadores
+        de flores ornamentales frescas en Colombia. Basado en la normativa del ICA
+        y estándares internacionales de la IPPC.
+      </p>
+      <div class="d-flex flex-wrap gap-3">
+        <a href="/usuarios/login/" class="btn-hero">
+          <i class="bi bi-box-arrow-in-right"></i>Ingresar al sistema
+        </a>
+        <a href="#como-funciona" class="btn-hero-outline">
+          <i class="bi bi-play-circle"></i>Cómo funciona
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row g-4 justify-content-center text-center">
+      <div class="col-6 col-md-3">
+        <div class="stat-num">62</div>
+        <div class="stat-label">Requisitos fitosanitarios</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num">10</div>
+        <div class="stat-label">Fases del Anexo 2</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Basado en normativa ICA</div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-num">PDF</div>
+        <div class="stat-label">Reportes descargables</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="funcionalidades">
+  <div class="container">
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-6 fade-up">
+        <span class="section-tag">Funcionalidades</span>
+        <h2>Todo lo que necesita para exportar con tranquilidad</h2>
+        <p class="lead">CheckExport digitaliza y organiza el proceso de verificación fitosanitaria, reduciendo errores y mejorando su preparación para inspecciones oficiales.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:#e8f5ef; color:#0d4f32"><i class="bi bi-check2-square"></i></div>
+          <h5>Checklist digital</h5>
+          <p>Verifique los 62 requisitos del Anexo 2 organizados en 10 fases. Marque cada ítem como Cumple, No cumple o No aplica.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:#fef3dc; color:#a06010"><i class="bi bi-bell-fill"></i></div>
+          <h5>Alertas automáticas</h5>
+          <p>El sistema le avisa cuando hay vencimientos de certificados o registros ICA próximos, antes de que sea tarde.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:#fdecea; color:#c0392b"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+          <h5>Reportes en PDF</h5>
+          <p>Genere reportes descargables del estado de cumplimiento fitosanitario de su predio, listos para inspección.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3 fade-up">
+        <div class="feat-card">
+          <div class="feat-icon" style="background:#e8f0fe; color:#1a56db"><i class="bi bi-graph-up"></i></div>
+          <h5>Indicadores de riesgo</h5>
+          <p>Vea en tiempo real el porcentaje de cumplimiento y el nivel de riesgo fitosanitario de cada uno de sus predios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="como-funciona">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5 fade-up">
+        <span class="section-tag">Paso a paso</span>
+        <h2>¿Cómo funciona?</h2>
+        <p class="lead mb-4">En tres pasos sencillos puede verificar el estado fitosanitario de su predio exportador.</p>
+        <div class="d-flex flex-column gap-3">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div>
+              <h5>Registre su predio</h5>
+              <p>Ingrese la información básica de su cultivo: nombre, municipio y número de registro ICA.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div>
+              <h5>Complete el checklist</h5>
+              <p>Revise cada uno de los 62 requisitos del Anexo 2 y marque cuáles cumple en su predio.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div>
+              <h5>Descargue su reporte</h5>
+              <p>Obtenga un PDF con el estado de cumplimiento, listo para presentar en inspecciones oficiales del ICA.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 fade-up">
+        <img src="https://agriculturadelasamericas.com/wp-content/uploads/2022/01/alstroemeria-g3fd7516a3_640.jpg"
+             alt="Flores ornamentales de exportación"
+             style="width:100%; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.15);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NORMA -->
+<section class="norma-section">
+  <div class="container">
+    <h2>Basado en normativa vigente</h2>
+    <p>CheckExport integra todos los requisitos establecidos por las autoridades fitosanitarias nacionales e internacionales para la exportación de flores ornamentales frescas.</p>
+    <div>
+      <span class="norma-badge"><i class="bi bi-shield-check me-1"></i>Resolución ICA 2191/2024</span>
+      <span class="norma-badge"><i class="bi bi-globe me-1"></i>IPPC — NIMF 23</span>
+      <span class="norma-badge"><i class="bi bi-building me-1"></i>Acuerdo MSF — OMC</span>
+      <span class="norma-badge"><i class="bi bi-flower1 me-1"></i>Flores ornamentales frescas</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contacto">
+  <div class="container">
+    <div class="text-center mb-4 fade-up">
+      <span class="section-tag">Contacto</span>
+      <h2>¿Tiene preguntas?</h2>
+      <p style="color:#4a5248; max-width:480px; margin:0 auto">
+        Comuníquese con el equipo de desarrollo del proyecto CheckExport del
+        Politécnico Colombiano Jaime Isaza Cadavid.
+      </p>
+    </div>
+    <div class="contact-card fade-up">
+      <p style="font-size:0.82rem; color:#4a5248; margin-bottom:1rem; text-align:center">
+        <i class="bi bi-mortarboard me-1"></i>
+      </p>
+      <div class="contact-person">
+        <div class="contact-avatar"><i class="bi bi-person"></i></div>
+        <div>
+          <div class="contact-name">Kelly Vanessa Palacios Mena</div>
+          <div class="contact-email"><a href="mailto:kelly_palacios82191@elpoli.edu.co">kelly_palacios82191@elpoli.edu.co</a></div>
+        </div>
+      </div>
+      <div class="contact-person">
+        <div class="contact-avatar"><i class="bi bi-person"></i></div>
+        <div>
+          <div class="contact-name">Maria Camila Giraldo Giraldo</div>
+          <div class="contact-email"><a href="mailto:maria_giraldo82222@elpoli.edu.co">maria_giraldo82222@elpoli.edu.co</a></div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:1.5rem">
+        <a href="/usuarios/login/" class="btn-ingresar" style="background:var(--verde); color:white; padding:0.65rem 2rem; border-radius:8px; text-decoration:none; font-family:'Outfit',sans-serif; font-weight:600; font-size:0.92rem; display:inline-block">
+          <i class="bi bi-box-arrow-in-right me-1"></i>Ingresar al sistema
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <span>CheckExport</span> · Politécnico Colombiano Jaime Isaza Cadavid · Ingeniería Informática</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Fade animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>

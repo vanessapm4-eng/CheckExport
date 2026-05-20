@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo predio - CheckExport{% endblock %}
+
+{% block extra_css %}
+<style>
+  .form-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .form-card-header {
+    background: var(--verde);
+    padding: 1.5rem 2rem;
+  }
+  .form-card-header h4 {
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    margin: 0;
+  }
+  .form-card-header p {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.85rem;
+    margin: 4px 0 0;
+  }
+  .form-body { padding: 2rem; }
+
+  .campo-grupo { margin-bottom: 1.4rem; }
+  .campo-label {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 3px;
+    display: block;
+  }
+  .campo-ayuda {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .form-control, .form-select {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--verde-mid);
+    box-shadow: 0 0 0 3px rgba(26,122,78,0.1);
+  }
+
+  .estado-opciones { display: flex; gap: 10px; flex-wrap: wrap; }
+  .estado-opcion input { display: none; }
+  .estado-opcion label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.55rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.15s;
+    background: white;
+    color: var(--text-mid);
+  }
+  .estado-opcion input:checked + label {
+    border-color: var(--verde-mid);
+    background: var(--verde-light);
+    color: var(--verde);
+  }
+  .estado-opcion label:hover { border-color: #aaa; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+  .seccion-titulo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+  }
+
+  .btn-guardar {
+    background: var(--verde);
+    color: white;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-guardar:hover { background: var(--verde-mid); }
+  .btn-cancelar {
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-mid);
+    padding: 0.65rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .btn-cancelar:hover { background: var(--bg); color: var(--text); }
+
+  .info-box {
+    background: #e8f0fe;
+    border: 1px solid #b8d0f8;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    color: #1a3a8a;
+    margin-bottom: 1.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:640px; margin:0 auto">
+
+  <div class="d-flex align-items-center gap-2 mb-3">
+    <a href="/" style="color:var(--text-light); text-decoration:none; font-size:0.85rem">
+      <i class="bi bi-arrow-left me-1"></i>Volver al panel
+    </a>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">
+      <h4><i class="bi bi-geo-alt me-2"></i>Registrar predio productor</h4>
+      <p>Complete la información de su cultivo de flores para comenzar el proceso de verificación fitosanitaria</p>
+    </div>
+
+    <div class="form-body">
+
+      <div class="info-box">
+        <i class="bi bi-info-circle me-2"></i>
+        Esta información es requerida por el <strong>ICA (Resolución 2191/2024)</strong> para la exportación de flores ornamentales.
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <p class="seccion-titulo"><i class="bi bi-building me-1"></i>Información del predio</p>
+
+        <div class="campo-grupo">
+          <label class="campo-label">Nombre del predio o finca <span style="color:#e74c3c">*</span></label>
+          <span class="campo-ayuda">¿Cómo se llama su cultivo o finca?</span>
+          <input type="text" name="nombre" class="form-control" placeholder="Ej: Finca Las Rosas, Cultivos El Vergel..." required>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="campo-grupo">
+              <label class="campo-label">Municipio <span style="color:#e74c3c">*</span></label>
+              <span class="campo-ayuda">¿En qué municipio está el cultivo?</span>
+              <input type="text" name="municipio" class="form-control" placeholder="Ej: Rionegro" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="campo-grupo">
+              <label class="campo-label">Departamento <span style="color:#e74c3c">*</span></label>
+              <span class="campo-ayuda">¿En qué departamento?</span>
+              <input type="text" name="departamento" class="form-control" placeholder="Ej: Antioquia" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="campo-grupo">
+          <label class="campo-label">Vereda (opcional)</label>
+          <span class="campo-ayuda">Nombre de la vereda donde está ubicado el predio</span>
+          <input type="text" name="vereda" class="form-control" placeholder="Ej: Vereda El Chuscal">
+        </div>
+
+        <hr class="divider">
+        <p class="seccion-titulo"><i class="bi bi-patch-check me-1"></i>Registro ante el ICA</p>
+
+        <div class="campo-grupo">
+          <label class="campo-label">Número de registro ICA <span style="color:#e74c3c">*</span></label>
+          <span class="campo-ayuda">
+            Es el código que le asignó el ICA cuando registró su predio para exportación. 
+            Si aún no lo tiene, puede continuar con el proceso de solicitud ante el ICA.
+            Tiene 9 dígitos (Ej: 05001-0023).
+          </span>
+          <input type="text" name="registro_ica" class="form-control" placeholder="Ej: 05001-0023" required>
+        </div>
+
+        <div class="campo-grupo">
+          <label class="campo-label">Estado de habilitación ICA</label>
+          <span class="campo-ayuda">¿En qué etapa del proceso de registro se encuentra?</span>
+          <div class="estado-opciones">
+            <div class="estado-opcion">
+              <input type="radio" name="estado_habilitacion" id="est1" value="en_proceso" checked>
+              <label for="est1"><i class="bi bi-clock" style="color:var(--amber)"></i>En proceso de solicitud</label>
+            </div>
+            <div class="estado-opcion">
+              <input type="radio" name="estado_habilitacion" id="est2" value="habilitado">
+              <label for="est2"><i class="bi bi-check-circle" style="color:var(--verde-mid)"></i>Ya tengo registro vigente</label>
+            </div>
+            <div class="estado-opcion">
+              <input type="radio" name="estado_habilitacion" id="est3" value="suspendido">
+              <label for="est3"><i class="bi bi-x-circle" style="color:#e74c3c"></i>Registro suspendido</label>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn-guardar">
+            <i class="bi bi-check2 me-1"></i>Registrar predio
+          </button>
+          <a href="/" class="btn-cancelar">Cancelar</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
