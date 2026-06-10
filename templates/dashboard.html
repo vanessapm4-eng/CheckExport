@@ -13,55 +13,45 @@
     gap: 1.2rem;
     transition: transform 0.2s, box-shadow 0.2s;
   }
-  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08) !important; }
+  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(193,75,133,0.12) !important; }
   .kpi-icon {
     width: 52px; height: 52px;
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.4rem; flex-shrink: 0;
   }
-  .kpi-icon.verde { background: var(--verde-light); color: var(--verde-mid); }
-  .kpi-icon.azul { background: #e8f0fe; color: #1a56db; }
-  .kpi-icon.amber { background: var(--amber-light); color: #a06010; }
-  .kpi-num { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; line-height: 1; color: var(--text); }
+  .kpi-icon.rosa  { background: var(--rosa-light);  color: var(--rosa-mid); }
+  .kpi-icon.azul  { background: #e8f0fe;             color: #1a56db; }
+  .kpi-icon.amber { background: var(--amber-light);  color: #a06010; }
+  .kpi-num   { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 700; line-height: 1; color: var(--text); }
   .kpi-label { font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
 
   .table th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); font-weight: 600; border-bottom: 1px solid var(--border) !important; }
-  .table td { vertical-align: middle; font-size: 0.9rem; border-bottom: 1px solid #f0f2ef !important; }
-  .table tbody tr:hover td { background: #fafbf9; }
+  .table td { vertical-align: middle; font-size: 0.9rem; border-bottom: 1px solid #f5eef2 !important; }
+  .table tbody tr:hover td { background: #fdf7fa; }
   .table tbody tr:last-child td { border-bottom: none !important; }
 
-  .progress { background: #eef0ec; border-radius: 99px; }
+  .progress { background: #f0e6ec; border-radius: 99px; }
   .progress-bar { border-radius: 99px; transition: width 0.6s ease; }
 
   .btn-nuevo {
-    background: var(--verde);
-    color: white;
-    border: none;
-    padding: 0.55rem 1.2rem;
-    border-radius: 8px;
-    font-size: 0.88rem;
-    font-weight: 500;
-    font-family: 'Outfit', sans-serif;
-    transition: background 0.2s;
-    text-decoration: none;
+    background: linear-gradient(135deg, var(--rosa-dark), var(--rosa));
+    color: white; border: none; padding: 0.55rem 1.2rem;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 500;
+    font-family: 'Outfit', sans-serif; transition: opacity 0.2s; text-decoration: none;
   }
-  .btn-nuevo:hover { background: var(--verde-mid); color: white; }
+  .btn-nuevo:hover { opacity: 0.88; color: white; }
 
   .btn-accion {
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--text-mid);
-    padding: 0.3rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    text-decoration: none;
-    transition: all 0.15s;
+    border: 1px solid var(--border); background: white; color: var(--text-mid);
+    padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.8rem;
+    text-decoration: none; transition: all 0.15s;
   }
-  .btn-accion:hover { background: var(--verde-light); border-color: #b8ddc9; color: var(--verde); }
+  .btn-accion:hover       { background: var(--rosa-light); border-color: var(--rosa-border); color: var(--rosa-dark); }
+  .btn-accion.btn-editar:hover { background: #e8f0fe; border-color: #a0b8e8; color: #1a3a8a; }
 
   .predio-nombre { font-weight: 600; color: var(--text); }
-  .predio-ica { font-size: 0.78rem; color: var(--text-light); }
+  .predio-ica    { font-size: 0.78rem; color: var(--text-light); }
 </style>
 {% endblock %}
 
@@ -80,7 +70,7 @@
 <div class="row g-3 mb-4">
   <div class="col-md-4">
     <div class="kpi-card">
-      <div class="kpi-icon verde"><i class="bi bi-geo-alt-fill"></i></div>
+      <div class="kpi-icon rosa"><i class="bi bi-geo-alt-fill"></i></div>
       <div>
         <div class="kpi-num">{{ total_predios }}</div>
         <div class="kpi-label">Predios registrados</div>
@@ -132,7 +122,7 @@
           </td>
           <td class="py-3">
             {% if predio.estado_habilitacion == 'habilitado' %}
-              <span class="badge badge-verde px-3 py-2 rounded-pill"><i class="bi bi-check-circle me-1"></i>Habilitado</span>
+              <span class="badge badge-rosa px-3 py-2 rounded-pill"><i class="bi bi-check-circle me-1"></i>Habilitado</span>
             {% elif predio.estado_habilitacion == 'suspendido' %}
               <span class="badge badge-rojo px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Suspendido</span>
             {% else %}
@@ -142,23 +132,28 @@
           <td class="py-3" style="min-width:160px">
             <div class="d-flex align-items-center gap-2">
               <div class="progress flex-grow-1" style="height:8px">
-                <div class="progress-bar" style="width:{{ predio.porcentaje_cumplimiento }}%; background:{% if predio.porcentaje_cumplimiento >= 80 %}var(--verde-mid){% elif predio.porcentaje_cumplimiento >= 50 %}var(--amber){% else %}#e74c3c{% endif %}"></div>
+                <div class="progress-bar" style="width:{{ predio.porcentaje_cumplimiento }}%; background:{% if predio.porcentaje_cumplimiento >= 80 %}var(--rosa-mid){% elif predio.porcentaje_cumplimiento >= 50 %}var(--amber){% else %}#e74c3c{% endif %}"></div>
               </div>
               <span style="font-size:0.8rem; font-weight:600; color:var(--text-mid); min-width:32px">{{ predio.porcentaje_cumplimiento }}%</span>
             </div>
           </td>
           <td class="py-3">
             {% with r=predio.nivel_riesgo %}
-              {% if r == 'bajo' %}<span class="badge badge-verde px-3 py-2 rounded-pill">Bajo</span>
+              {% if r == 'bajo' %}<span class="badge badge-rosa px-3 py-2 rounded-pill">Bajo</span>
               {% elif r == 'medio' %}<span class="badge badge-amber px-3 py-2 rounded-pill">Medio</span>
               {% else %}<span class="badge badge-rojo px-3 py-2 rounded-pill">Alto</span>
               {% endif %}
             {% endwith %}
           </td>
           <td class="py-3">
-            <a href="/checklist/predio/{{ predio.pk }}/" class="btn-accion">
-              <i class="bi bi-check2-square me-1"></i>Ver checklist
-            </a>
+            <div class="d-flex gap-2">
+              <a href="/checklist/predio/{{ predio.pk }}/" class="btn-accion">
+                <i class="bi bi-check2-square me-1"></i>Checklist
+              </a>
+              <a href="/predios/{{ predio.pk }}/editar/" class="btn-accion btn-editar">
+                <i class="bi bi-pencil me-1"></i>Editar
+              </a>
+            </div>
           </td>
         </tr>
         {% empty %}
@@ -166,7 +161,7 @@
           <td colspan="5" class="text-center py-5" style="color:var(--text-light)">
             <i class="bi bi-inbox display-6 d-block mb-2"></i>
             No tienes predios registrados.
-            <a href="/predios/nuevo/" style="color:var(--verde-mid)">Crea el primero</a>
+            <a href="/predios/nuevo/" style="color:var(--rosa-mid)">Crea el primero</a>
           </td>
         </tr>
         {% endfor %}

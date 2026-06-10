@@ -12,7 +12,7 @@
     margin: 0 auto;
   }
   .form-card-header {
-    background: var(--verde);
+    background: linear-gradient(135deg, var(--rosa-dark) 0%, var(--rosa) 100%);
     padding: 1.5rem 2rem;
   }
   .form-card-header h4 {
@@ -51,8 +51,9 @@
     transition: border-color 0.2s;
   }
   .form-control:focus, .form-select:focus {
-    border-color: var(--verde-mid);
-    box-shadow: 0 0 0 3px rgba(26,122,78,0.1);
+    border-color: var(--rosa-mid);
+    box-shadow: 0 0 0 3px rgba(193,75,133,0.12);
+    outline: none;
   }
 
   .estado-opciones { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -72,11 +73,11 @@
     color: var(--text-mid);
   }
   .estado-opcion input:checked + label {
-    border-color: var(--verde-mid);
-    background: var(--verde-light);
-    color: var(--verde);
+    border-color: var(--rosa-mid);
+    background: var(--rosa-light);
+    color: var(--rosa-dark);
   }
-  .estado-opcion label:hover { border-color: #aaa; }
+  .estado-opcion label:hover { border-color: #c8a0b8; }
 
   .divider {
     border: none;
@@ -94,7 +95,7 @@
   }
 
   .btn-guardar {
-    background: var(--verde);
+    background: linear-gradient(135deg, var(--rosa-dark), var(--rosa));
     color: white;
     border: none;
     padding: 0.65rem 1.5rem;
@@ -103,9 +104,9 @@
     font-weight: 600;
     font-size: 0.92rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: opacity 0.2s;
   }
-  .btn-guardar:hover { background: var(--verde-mid); }
+  .btn-guardar:hover { opacity: 0.88; }
   .btn-cancelar {
     border: 1px solid var(--border);
     background: white;
@@ -119,12 +120,12 @@
   .btn-cancelar:hover { background: var(--bg); color: var(--text); }
 
   .info-box {
-    background: #e8f0fe;
-    border: 1px solid #b8d0f8;
+    background: var(--rosa-light);
+    border: 1px solid var(--rosa-border);
     border-radius: 8px;
     padding: 0.8rem 1rem;
     font-size: 0.82rem;
-    color: #1a3a8a;
+    color: var(--rosa-dark);
     margin-bottom: 1.5rem;
   }
 </style>
@@ -192,7 +193,7 @@
         <div class="campo-grupo">
           <label class="campo-label">Número de registro ICA <span style="color:#e74c3c">*</span></label>
           <span class="campo-ayuda">
-            Es el código que le asignó el ICA cuando registró su predio para exportación. 
+            Es el código que le asignó el ICA cuando registró su predio para exportación.
             Si aún no lo tiene, puede continuar con el proceso de solicitud ante el ICA.
             Tiene 9 dígitos (Ej: 05001-0023).
           </span>
@@ -209,7 +210,7 @@
             </div>
             <div class="estado-opcion">
               <input type="radio" name="estado_habilitacion" id="est2" value="habilitado">
-              <label for="est2"><i class="bi bi-check-circle" style="color:var(--verde-mid)"></i>Ya tengo registro vigente</label>
+              <label for="est2"><i class="bi bi-check-circle" style="color:var(--rosa-mid)"></i>Ya tengo registro vigente</label>
             </div>
             <div class="estado-opcion">
               <input type="radio" name="estado_habilitacion" id="est3" value="suspendido">

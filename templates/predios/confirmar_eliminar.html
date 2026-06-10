@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Eliminar predio - CheckExport{% endblock %}
+
+{% block extra_css %}
+<style>
+  .confirm-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .confirm-header {
+    background: linear-gradient(135deg, #a93226, #e74c3c);
+    padding: 1.5rem 2rem;
+  }
+  .confirm-header h4 { color:white; font-family:'Outfit',sans-serif; font-weight:700; margin:0; }
+  .confirm-header p  { color:rgba(255,255,255,0.7); font-size:0.85rem; margin:4px 0 0; }
+  .confirm-body { padding: 2rem; }
+
+  .alerta-box {
+    background: #fdecea;
+    border: 1px solid #f5b8b2;
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.88rem;
+    color: #7b241c;
+  }
+  .predio-info {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .predio-info strong { font-family:'Outfit',sans-serif; font-size:1rem; color:var(--text); }
+  .predio-info span   { font-size:0.82rem; color:var(--text-light); display:block; margin-top:2px; }
+
+  .btn-confirmar {
+    background: linear-gradient(135deg, #a93226, #e74c3c);
+    color:white; border:none; padding:0.65rem 1.5rem; border-radius:8px;
+    font-family:'Outfit',sans-serif; font-weight:600; font-size:0.92rem;
+    cursor:pointer; transition:opacity 0.2s;
+  }
+  .btn-confirmar:hover { opacity:0.88; }
+  .btn-cancelar {
+    border:1px solid var(--border); background:white; color:var(--text-mid);
+    padding:0.65rem 1.2rem; border-radius:8px; font-size:0.88rem;
+    text-decoration:none; transition:all 0.15s;
+  }
+  .btn-cancelar:hover { background:var(--bg); color:var(--text); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:500px; margin:0 auto">
+
+  <div class="d-flex align-items-center gap-2 mb-3">
+    <a href="/predios/{{ predio.pk }}/editar/" style="color:var(--text-light); text-decoration:none; font-size:0.85rem">
+      <i class="bi bi-arrow-left me-1"></i>Volver a editar
+    </a>
+  </div>
+
+  <div class="confirm-card">
+    <div class="confirm-header">
+      <h4><i class="bi bi-trash me-2"></i>Eliminar predio</h4>
+      <p>Esta acción no se puede deshacer</p>
+    </div>
+
+    <div class="confirm-body">
+
+      <div class="alerta-box">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong>¿Estás segura?</strong> Se eliminarán también todos los registros del checklist, monitoreos y alertas asociados a este predio.
+      </div>
+
+      <div class="predio-info">
+        <strong>{{ predio.nombre }}</strong>
+        <span><i class="bi bi-tag me-1"></i>{{ predio.registro_ica }}</span>
+        <span><i class="bi bi-geo-alt me-1"></i>{{ predio.municipio }}, {{ predio.departamento }}</span>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn-confirmar">
+            <i class="bi bi-trash me-1"></i>Sí, eliminar predio
+          </button>
+          <a href="/predios/{{ predio.pk }}/editar/" class="btn-cancelar">Cancelar</a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
