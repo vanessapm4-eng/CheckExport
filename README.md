@@ -140,6 +140,6 @@ Programa de Ingeniería Informática
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto se desarrolla con fines académicos.
