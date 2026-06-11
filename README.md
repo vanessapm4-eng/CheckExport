@@ -126,7 +126,22 @@ El proyecto se desarrolla bajo la metodología ágil **Scrum**.
 7. Exportación del producto.
 
 ---
+## Tecnologías Utilizadas
 
+### Backend
+- Python
+- Django
+
+### Base de Datos
+- MySQL
+
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+- Bootstrap
+
+---
 ## Integrantes
 
 - Maria Camila Giraldo Giraldo
